@@ -1,3 +1,11 @@
+// Timing constants
+const RIPPLE_START_DELAY = 500;
+const RIPPLE_FADE_DELAY = 5800;
+const INTRO_FADE_DELAY = 6500;
+const INTRO_REMOVE_DELAY = 8000; // final delay for overlay removal
+const STARFIELD_FADE_DELAY = 11300;
+const CONTENT_FADE_DELAY = 12100;
+
 function startRippleAnimation(canvas) {
   const ctx = canvas.getContext('2d');
   const size = Math.min(canvas.width, canvas.height);
@@ -33,6 +41,22 @@ function startRippleAnimation(canvas) {
   requestAnimationFrame(draw);
 }
 
+// Chalk text element
+const chalk = document.createElement('div');
+chalk.id = 'chalk-text';
+chalk.textContent = 'welcome.';
+chalk.style.position = 'absolute';
+chalk.style.top = '40%';
+chalk.style.left = '50%';
+chalk.style.transform = 'translate(-50%, -50%)';
+chalk.style.fontFamily = '"Comic Sans MS", cursive';
+chalk.style.fontSize = '2.5rem';
+chalk.style.color = '#ffffff';
+chalk.style.opacity = 0;
+chalk.style.transition = 'opacity 2s ease-in-out';
+chalk.style.zIndex = 101;
+document.body.appendChild(chalk);
+
 window.addEventListener('DOMContentLoaded', () => {
   const intro = document.createElement('div');
   intro.id = 'intro-sequence';
@@ -61,45 +85,29 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     rippleCanvas.style.opacity = 1;
     startRippleAnimation(rippleCanvas);
-  }, 500); // slight delay after load
+  }, RIPPLE_START_DELAY); // slight delay after load
 
   setTimeout(() => {
     rippleCanvas.style.opacity = 0;
-  }, 5800); // fade ripple gently, later
+  }, RIPPLE_FADE_DELAY); // fade ripple gently, later
 
   setTimeout(() => {
     intro.style.transition = 'opacity 1.5s ease-in-out';
     intro.style.opacity = 0;
-  }, 6500); // fade whole intro slower
+  }, INTRO_FADE_DELAY); // fade whole intro slower
 
   setTimeout(() => {
     intro.remove();
     chalk.style.opacity = 1; // begin chalk fade in
-  }, 8000); // remove overlay
+  }, INTRO_REMOVE_DELAY); // remove overlay
 });
-
-// Chalk text
-const chalk = document.createElement('div');
-chalk.id = 'chalk-text';
-chalk.textContent = 'welcome.';
-chalk.style.position = 'absolute';
-chalk.style.top = '40%';
-chalk.style.left = '50%';
-chalk.style.transform = 'translate(-50%, -50%)';
-chalk.style.fontFamily = '"Comic Sans MS", cursive';
-chalk.style.fontSize = '2.5rem';
-chalk.style.color = '#ffffff';
-chalk.style.opacity = 0;
-chalk.style.transition = 'opacity 2s ease-in-out';
-chalk.style.zIndex = 101;
-document.body.appendChild(chalk);
 
 // Reveal stars and content after chalk fades
 setTimeout(() => {
   chalk.style.opacity = 0;
   document.getElementById('starfield').style.opacity = 1;
-}, 11300);
+}, STARFIELD_FADE_DELAY);
 
 setTimeout(() => {
   document.getElementById('scroll-content').style.opacity = 1;
-}, 12100);
+}, CONTENT_FADE_DELAY);
