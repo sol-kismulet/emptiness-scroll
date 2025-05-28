@@ -18,29 +18,27 @@ window.addEventListener('DOMContentLoaded', () => {
   ripple.src = 'assets/ripple.svg';
   ripple.style.width = '100px';
   ripple.style.opacity = 0;
-  ripple.style.transition = 'opacity 2s ease-in-out, transform 6s ease-out';
+  ripple.style.transition = 'opacity 1.5s ease-in-out, transform 3.5s ease-out';
   intro.appendChild(ripple);
 
   setTimeout(() => {
     ripple.style.opacity = 1;
     ripple.style.transform = 'scale(3)';
-  }, 800); // slight delay after load
+  }, 500); // slight delay after load
 
   setTimeout(() => {
     ripple.style.opacity = 0;
-  }, 5000); // fade ripple
+  }, 3500); // fade ripple
 
   setTimeout(() => {
+    intro.style.transition = 'opacity 1.2s ease-in-out';
     intro.style.opacity = 0;
-    intro.style.transition = 'opacity 2s ease-in-out';
-  }, 6000); // fade whole intro
+  }, 4200); // fade whole intro
 
   setTimeout(() => {
     intro.remove();
-    // reveal stars.js canvas and scroll content here
-    document.getElementById('starfield').style.opacity = 1;
-    document.getElementById('scroll-content').style.opacity = 1;
-  }, 8000); // complete transition
+    svg.style.opacity = 1; // begin chalk fade in
+  }, 5400); // remove overlay
 });
 
 // After intro fade, animate the word "welcome."
@@ -59,10 +57,7 @@ svg.style.opacity = 0;
 svg.style.transition = 'opacity 1.5s ease-in-out';
 document.body.appendChild(svg);
 
-// Fade it in after intro
-setTimeout(() => {
-  svg.style.opacity = 1;
-}, 8200);
+  // Path starts shortly after the svg becomes visible
 
 // Single path for "welcome." – this is a pre-designed curve
 const path = document.createElementNS(svgNS, 'path');
@@ -83,14 +78,7 @@ svg.appendChild(path);
 setTimeout(() => {
   path.style.transition = 'stroke-dashoffset 4s ease-out';
   path.setAttribute('stroke-dashoffset', '0');
-}, 8400);
-
-// You can later trigger this to dissolve the text
-window.fadeChalkToStardust = () => {
-  svg.style.transition = 'opacity 2s ease-in';
-  svg.style.opacity = 0;
-  setTimeout(() => svg.remove(), 3000);
-};
+}, 5600);
 
 window.fadeChalkToStardust = () => {
   const numParticles = 300;
@@ -138,3 +126,13 @@ window.fadeChalkToStardust = () => {
     svg.remove();
   }, 6000);
 };
+
+// Trigger chalk dissolution, then reveal stars and content
+setTimeout(() => {
+  window.fadeChalkToStardust();
+  document.getElementById('starfield').style.opacity = 1;
+}, 9800);
+
+setTimeout(() => {
+  document.getElementById('scroll-content').style.opacity = 1;
+}, 10600);
