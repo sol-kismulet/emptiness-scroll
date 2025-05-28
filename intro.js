@@ -91,3 +91,50 @@ window.fadeChalkToStardust = () => {
   svg.style.opacity = 0;
   setTimeout(() => svg.remove(), 3000);
 };
+
+window.fadeChalkToStardust = () => {
+  const numParticles = 300;
+  const length = path.getTotalLength();
+  const particleGroup = document.createElementNS(svgNS, 'g');
+  svg.appendChild(particleGroup);
+
+  // Create particles at random points along the path
+  for (let i = 0; i < numParticles; i++) {
+    const offset = Math.random() * length;
+    const point = path.getPointAtLength(offset);
+    const particle = document.createElementNS(svgNS, 'circle');
+    particle.setAttribute('cx', point.x);
+    particle.setAttribute('cy', point.y);
+    particle.setAttribute('r', Math.random() * 1.5 + 0.5);
+    particle.setAttribute('fill', '#ffffff');
+    particle.setAttribute('opacity', 1);
+    particleGroup.appendChild(particle);
+
+    // Animate each particle to drift and fade
+    const dx = (Math.random() - 0.5) * 40;
+    const dy = -Math.random() * 40 - 10;
+    const duration = 3000 + Math.random() * 2000;
+
+    const animate = particle.animate([
+      { transform: 'translate(0,0)', opacity: 1 },
+      { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 }
+    ], {
+      duration,
+      easing: 'ease-out',
+      fill: 'forwards'
+    });
+
+    animate.onfinish = () => {
+      particle.remove();
+    };
+  }
+
+  // Fade out the original chalk path
+  path.style.transition = 'opacity 1.5s ease-in';
+  path.style.opacity = 0;
+
+  // Remove the full SVG after particles are done
+  setTimeout(() => {
+    svg.remove();
+  }, 6000);
+};
