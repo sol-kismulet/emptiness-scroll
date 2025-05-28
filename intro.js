@@ -65,111 +65,41 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => {
     rippleCanvas.style.opacity = 0;
-  }, 3500); // fade ripple
+  }, 3800); // fade ripple gently
 
   setTimeout(() => {
-    intro.style.transition = 'opacity 1.2s ease-in-out';
+    intro.style.transition = 'opacity 1.5s ease-in-out';
     intro.style.opacity = 0;
-  }, 4200); // fade whole intro
+  }, 4500); // fade whole intro slower
 
   setTimeout(() => {
     intro.remove();
-    svg.style.opacity = 1; // begin chalk fade in
-  }, 5400); // remove overlay
+    chalk.style.opacity = 1; // begin chalk fade in
+  }, 6000); // remove overlay
 });
 
-// After intro fade, animate the word "welcome."
-const svgNS = "http://www.w3.org/2000/svg";
-const svg = document.createElementNS(svgNS, 'svg');
-svg.setAttribute('id', 'chalk-writing');
-svg.setAttribute('width', '600');
-svg.setAttribute('height', '100');
-svg.setAttribute('viewBox', '0 0 600 100');
-svg.style.position = 'absolute';
-svg.style.top = '40%';
-svg.style.left = '50%';
-svg.style.transform = 'translate(-50%, -50%)';
-svg.style.zIndex = 101;
-svg.style.opacity = 0;
-svg.style.transition = 'opacity 1.5s ease-in-out';
-document.body.appendChild(svg);
+// Chalk text
+const chalk = document.createElement('div');
+chalk.id = 'chalk-text';
+chalk.textContent = 'welcome.';
+chalk.style.position = 'absolute';
+chalk.style.top = '40%';
+chalk.style.left = '50%';
+chalk.style.transform = 'translate(-50%, -50%)';
+chalk.style.fontFamily = '"Comic Sans MS", cursive';
+chalk.style.fontSize = '2.5rem';
+chalk.style.color = '#ffffff';
+chalk.style.opacity = 0;
+chalk.style.transition = 'opacity 2s ease-in-out';
+chalk.style.zIndex = 101;
+document.body.appendChild(chalk);
 
-  // Path starts shortly after the svg becomes visible
-
-// Single path for "welcome." – this is a pre-designed curve
-const path = document.createElementNS(svgNS, 'path');
-path.setAttribute('d',
-  'M10 80 Q 40 10, 70 80 T 130 80 T 190 80 T 250 80 T 310 80 T 370 80' +
-  ' M390 80 q 15 -30 30 0 M430 80 h 10' // playful ending curve for the dot
-);
-path.setAttribute('fill', 'none');
-path.setAttribute('stroke', '#ffffff');
-path.setAttribute('stroke-width', '3');
-path.setAttribute('stroke-linecap', 'round');
-path.setAttribute('stroke-linejoin', 'round');
-path.setAttribute('stroke-dasharray', '1000');
-path.setAttribute('stroke-dashoffset', '1000');
-svg.appendChild(path);
-
-// Animate stroke drawing
+// Reveal stars and content after chalk fades
 setTimeout(() => {
-  path.style.transition = 'stroke-dashoffset 4s ease-out';
-  path.setAttribute('stroke-dashoffset', '0');
-}, 5600);
-
-window.fadeChalkToStardust = () => {
-  const numParticles = 300;
-  const length = path.getTotalLength();
-  const particleGroup = document.createElementNS(svgNS, 'g');
-  svg.appendChild(particleGroup);
-
-  // Create particles at random points along the path
-  for (let i = 0; i < numParticles; i++) {
-    const offset = Math.random() * length;
-    const point = path.getPointAtLength(offset);
-    const particle = document.createElementNS(svgNS, 'circle');
-    particle.setAttribute('cx', point.x);
-    particle.setAttribute('cy', point.y);
-    particle.setAttribute('r', Math.random() * 1.5 + 0.5);
-    particle.setAttribute('fill', '#ffffff');
-    particle.setAttribute('opacity', 1);
-    particleGroup.appendChild(particle);
-
-    // Animate each particle to drift and fade
-    const dx = (Math.random() - 0.5) * 40;
-    const dy = -Math.random() * 40 - 10;
-    const duration = 3000 + Math.random() * 2000;
-
-    const animate = particle.animate([
-      { transform: 'translate(0,0)', opacity: 1 },
-      { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 }
-    ], {
-      duration,
-      easing: 'ease-out',
-      fill: 'forwards'
-    });
-
-    animate.onfinish = () => {
-      particle.remove();
-    };
-  }
-
-  // Fade out the original chalk path
-  path.style.transition = 'opacity 1.5s ease-in';
-  path.style.opacity = 0;
-
-  // Remove the full SVG after particles are done
-  setTimeout(() => {
-    svg.remove();
-  }, 6000);
-};
-
-// Trigger chalk dissolution, then reveal stars and content
-setTimeout(() => {
-  window.fadeChalkToStardust();
+  chalk.style.opacity = 0;
   document.getElementById('starfield').style.opacity = 1;
-}, 9800);
+}, 9300);
 
 setTimeout(() => {
   document.getElementById('scroll-content').style.opacity = 1;
-}, 10600);
+}, 10100);
