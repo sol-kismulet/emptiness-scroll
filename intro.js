@@ -1,3 +1,38 @@
+function startRippleAnimation(canvas) {
+  const ctx = canvas.getContext('2d');
+  const size = Math.min(canvas.width, canvas.height);
+  const maxRadius = size / 2 - 2;
+  const ringDelays = [0, 600, 1200];
+  const duration = 2500;
+
+  let start;
+  function draw(t) {
+    if (!start) start = t;
+    const elapsed = t - start;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ringDelays.forEach(delay => {
+      const progress = (elapsed - delay) / duration;
+      if (progress < 0 || progress > 1) return;
+      const radius = 2 + progress * maxRadius;
+      const alpha = 1 - progress;
+      ctx.beginPath();
+      ctx.filter = `blur(${progress * 2}px)`;
+      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      ctx.lineWidth = 2;
+      ctx.arc(size / 2, size / 2, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.filter = 'none';
+    });
+
+    if (elapsed < duration + ringDelays[ringDelays.length - 1]) {
+      requestAnimationFrame(draw);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   const intro = document.createElement('div');
   intro.id = 'intro-sequence';
@@ -14,20 +49,22 @@ window.addEventListener('DOMContentLoaded', () => {
   intro.style.flexDirection = 'column';
   document.body.appendChild(intro);
 
-  const ripple = document.createElement('img');
-  ripple.src = 'assets/ripple.svg';
-  ripple.style.width = '100px';
-  ripple.style.opacity = 0;
-  ripple.style.transition = 'opacity 1.5s ease-in-out, transform 3.5s ease-out';
-  intro.appendChild(ripple);
+  const rippleCanvas = document.createElement('canvas');
+  rippleCanvas.width = 200;
+  rippleCanvas.height = 200;
+  rippleCanvas.style.width = '120px';
+  rippleCanvas.style.height = '120px';
+  rippleCanvas.style.opacity = 0;
+  rippleCanvas.style.transition = 'opacity 1.5s ease-in-out';
+  intro.appendChild(rippleCanvas);
 
   setTimeout(() => {
-    ripple.style.opacity = 1;
-    ripple.style.transform = 'scale(3)';
+    rippleCanvas.style.opacity = 1;
+    startRippleAnimation(rippleCanvas);
   }, 500); // slight delay after load
 
   setTimeout(() => {
-    ripple.style.opacity = 0;
+    rippleCanvas.style.opacity = 0;
   }, 3500); // fade ripple
 
   setTimeout(() => {
