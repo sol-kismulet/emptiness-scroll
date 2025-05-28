@@ -1,9 +1,9 @@
 function startRippleAnimation(canvas) {
   const ctx = canvas.getContext('2d');
   const size = Math.min(canvas.width, canvas.height);
-  const maxRadius = size / 2 - 2;
-  const ringDelays = [0, 600, 1200];
-  const duration = 2500;
+  const maxRadius = size * 0.75; // let rings travel farther
+  const ringDelays = [0, 800, 1600];
+  const duration = 4000; // breathe longer
 
   let start;
   function draw(t) {
@@ -15,7 +15,7 @@ function startRippleAnimation(canvas) {
       const progress = (elapsed - delay) / duration;
       if (progress < 0 || progress > 1) return;
       const radius = 2 + progress * maxRadius;
-      const alpha = 1 - progress;
+      const alpha = 1 - Math.pow(progress, 2); // fade more slowly
       ctx.beginPath();
       ctx.filter = `blur(${progress * 2}px)`;
       ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
@@ -50,10 +50,10 @@ window.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(intro);
 
   const rippleCanvas = document.createElement('canvas');
-  rippleCanvas.width = 200;
-  rippleCanvas.height = 200;
-  rippleCanvas.style.width = '120px';
-  rippleCanvas.style.height = '120px';
+  rippleCanvas.width = 300;
+  rippleCanvas.height = 300;
+  rippleCanvas.style.width = '150px';
+  rippleCanvas.style.height = '150px';
   rippleCanvas.style.opacity = 0;
   rippleCanvas.style.transition = 'opacity 1.5s ease-in-out';
   intro.appendChild(rippleCanvas);
@@ -65,17 +65,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => {
     rippleCanvas.style.opacity = 0;
-  }, 3800); // fade ripple gently
+  }, 5800); // fade ripple gently, later
 
   setTimeout(() => {
     intro.style.transition = 'opacity 1.5s ease-in-out';
     intro.style.opacity = 0;
-  }, 4500); // fade whole intro slower
+  }, 6500); // fade whole intro slower
 
   setTimeout(() => {
     intro.remove();
     chalk.style.opacity = 1; // begin chalk fade in
-  }, 6000); // remove overlay
+  }, 8000); // remove overlay
 });
 
 // Chalk text
@@ -98,8 +98,8 @@ document.body.appendChild(chalk);
 setTimeout(() => {
   chalk.style.opacity = 0;
   document.getElementById('starfield').style.opacity = 1;
-}, 9300);
+}, 11300);
 
 setTimeout(() => {
   document.getElementById('scroll-content').style.opacity = 1;
-}, 10100);
+}, 12100);
