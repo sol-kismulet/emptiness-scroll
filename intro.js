@@ -100,6 +100,13 @@ setTimeout(() => {
   document.getElementById('starfield').style.opacity = 1;
 }, 9300);
 
+// launch a single shooting star before the scroll fades in
+setTimeout(() => {
+  if (window.startShootingStar) {
+    window.startShootingStar();
+  }
+}, 9600);
+
 setTimeout(() => {
   document.getElementById('scroll-content').style.opacity = 1;
 }, 10100);
