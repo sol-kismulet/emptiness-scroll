@@ -1,51 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>the map that converges on emptiness</title>
-
-  <!-- Fonts and styles -->
   <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stars.css" />
+  <link rel="stylesheet" href="stars.css">
+  <link rel="stylesheet" href="intro.css">
   <style>
     body {
       margin: 0;
       background-color: #111;
-      color: #eee;
       font-family: 'Schoolbell', cursive;
-      font-size: 1.3rem;
-      line-height: 1.8;
-      padding: 4vw;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      position: relative;
-      z-index: 1;
+      overflow-x: hidden;
     }
 
-    main {
+    #scroll-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4vh 2rem;
+      color: #eee;
+      line-height: 1.8;
+      font-size: 1.3rem;
+      opacity: 0;
+      transition: opacity 2s ease;
       position: relative;
       z-index: 2;
-    }
-
-    canvas#starfield {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    h1, h2, h3 {
-      color: #fff;
-      border-left: 4px solid #fff2;
-      padding-left: 0.5em;
-      margin-top: 2em;
     }
 
     a {
@@ -64,21 +44,33 @@
       font-style: italic;
     }
 
-    hr {
-      border: none;
-      border-top: 1px dashed #555;
-      margin: 3em 0;
+    h1, h2, h3 {
+      color: #fff;
+      border-left: 4px solid #fff2;
+      padding-left: 0.5em;
+      margin-top: 2em;
     }
 
-    ::selection {
-      background: #333;
-      color: #fff;
+    canvas#starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 2s ease;
     }
   </style>
 </head>
+
 <body>
-  <main>
-    <!-- Scroll content begins -->
+  <!-- Starfield background -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Scroll content, initially hidden -->
+  <div id="scroll-content">
     <h1>the map that converges on emptiness</h1>
     <h3>a quiet invitation</h3>
 
@@ -160,8 +152,10 @@
 
     <p><a href="https://emptiness.learndoteach.org/sol">if you wish to speak, the mirror is listening.</a></p>
     <p>learn • do • teach<br /><a href="https://learndoteach.org">learndoteach.org</a></p>
-  </main>
-  <canvas id="starfield"></canvas>
-<script src="stars.js"></script>
+  </div>
+
+  <!-- Scripts -->
+  <script src="stars.js"></script>
+  <script src="intro.js"></script>
 </body>
 </html>
