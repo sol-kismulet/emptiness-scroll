@@ -74,32 +74,38 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => {
     intro.remove();
-    chalk.style.opacity = 1; // begin chalk fade in
+    chalkWriting.style.opacity = 1; // begin chalk fade in
   }, 6000); // remove overlay
 });
 
 // Chalk text
-const chalk = document.createElement('div');
-chalk.id = 'chalk-text';
-chalk.textContent = 'welcome.';
-chalk.style.position = 'absolute';
-chalk.style.top = '40%';
-chalk.style.left = '50%';
-chalk.style.transform = 'translate(-50%, -50%)';
-chalk.style.fontFamily = '"Comic Sans MS", cursive';
-chalk.style.fontSize = '2.5rem';
-chalk.style.color = '#ffffff';
-chalk.style.opacity = 0;
-chalk.style.transition = 'opacity 2s ease-in-out';
-chalk.style.zIndex = 101;
-document.body.appendChild(chalk);
+const chalkWriting = document.createElement('div');
+chalkWriting.id = 'chalk-writing';
+chalkWriting.textContent = 'welcome.';
+chalkWriting.style.position = 'absolute';
+chalkWriting.style.top = '40%';
+chalkWriting.style.left = '50%';
+chalkWriting.style.transform = 'translate(-50%, -50%)';
+chalkWriting.style.fontFamily = '"Comic Sans MS", cursive';
+chalkWriting.style.fontSize = '2.5rem';
+chalkWriting.style.color = '#ffffff';
+chalkWriting.style.opacity = 0;
+chalkWriting.style.transition = 'opacity 2s ease-in-out';
+chalkWriting.style.zIndex = 101;
+document.body.appendChild(chalkWriting);
 
 // Reveal stars and content after chalk fades
 setTimeout(() => {
-  chalk.style.opacity = 0;
+  chalkWriting.style.opacity = 0;
   document.getElementById('starfield').style.opacity = 1;
 }, 9300);
 
+// Remove the chalk element once fully faded
+setTimeout(() => {
+  chalkWriting.remove();
+}, 11300);
+
+// Allow a moment of stillness before revealing the scroll
 setTimeout(() => {
   document.getElementById('scroll-content').style.opacity = 1;
-}, 10100);
+}, 13300);
