@@ -8,8 +8,9 @@ const CONTENT_FADE_DELAY = 12100;
 
 function startRippleAnimation(canvas) {
   const ctx = canvas.getContext('2d');
-  const size = Math.min(canvas.width, canvas.height);
-  const maxRadius = size * 0.75; // let rings travel farther
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const maxRadius = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2;
   const ringDelays = [0, 800, 1600];
   const duration = 4000; // breathe longer
 
@@ -28,7 +29,7 @@ function startRippleAnimation(canvas) {
       ctx.filter = `blur(${progress * 2}px)`;
       ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
       ctx.lineWidth = 2;
-      ctx.arc(size / 2, size / 2, radius, 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
       ctx.stroke();
       ctx.filter = 'none';
     });
@@ -74,10 +75,13 @@ window.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(intro);
 
   const rippleCanvas = document.createElement('canvas');
-  rippleCanvas.width = 300;
-  rippleCanvas.height = 300;
-  rippleCanvas.style.width = '150px';
-  rippleCanvas.style.height = '150px';
+  rippleCanvas.width = window.innerWidth;
+  rippleCanvas.height = window.innerHeight;
+  rippleCanvas.style.width = '100vw';
+  rippleCanvas.style.height = '100vh';
+  rippleCanvas.style.position = 'absolute';
+  rippleCanvas.style.top = 0;
+  rippleCanvas.style.left = 0;
   rippleCanvas.style.opacity = 0;
   rippleCanvas.style.transition = 'opacity 1.5s ease-in-out';
   intro.appendChild(rippleCanvas);
