@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>the map that converges on emptiness</title>
   <link rel="stylesheet" href="stars.css">
+  <link rel="stylesheet" href="https://architecture.kismulet.org/style.css" />
   <style>
     body {
       margin: 0;
       background-color: #111;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-childlike, "Cormorant Garamond", serif);
       overflow-x: hidden;
     }
 
@@ -43,6 +44,7 @@
     }
 
     h1, h2, h3 {
+      font-family: var(--font-secondary, inherit);
       color: #fff;
       border-left: 4px solid #fff2;
       padding-left: 0.5em;
@@ -84,7 +86,7 @@
   </style>
 </head>
 
-<body>
+<body class="starfield-theme">
   <!-- Starfield background -->
   <canvas id="starfield"></canvas>
 
@@ -178,6 +180,11 @@
     if it finds you, it was time.</p>
     <p><a id="toggle-link" href="#">see how the chalk was placed</a></p>
   </div>
+  <footer>
+    <p style="text-align: center; font-size: 0.8rem; opacity: 0.6;">
+      style and tone by <a href="https://architecture.kismulet.org">architecture.kismulet.org</a>
+    </p>
+  </footer>
 
   <!-- Scripts -->
   <script src="stars.js"></script>
