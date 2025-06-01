@@ -82,6 +82,8 @@ window.addEventListener('DOMContentLoaded', () => {
   rippleCanvas.style.position = 'absolute';
   rippleCanvas.style.top = 0;
   rippleCanvas.style.left = 0;
+  rippleCanvas.style.zIndex = 99;
+  rippleCanvas.style.pointerEvents = 'none';
   rippleCanvas.style.opacity = 0;
   rippleCanvas.style.transition = 'opacity 1.5s ease-in-out';
   intro.appendChild(rippleCanvas);
@@ -92,12 +94,15 @@ window.addEventListener('DOMContentLoaded', () => {
   }, RIPPLE_START_DELAY); // slight delay after load
 
   setTimeout(() => {
-    rippleCanvas.style.opacity = 0;
-    // clear any residual rings once faded
+    // clear any residual rings before fading out
     const ctx = rippleCanvas.getContext('2d');
     ctx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
-    // remove the canvas after the fade to avoid lingering artifacts
-    setTimeout(() => rippleCanvas.remove(), 1600);
+    const remove = () => {
+      rippleCanvas.removeEventListener('transitionend', remove);
+      rippleCanvas.remove();
+    };
+    rippleCanvas.addEventListener('transitionend', remove);
+    rippleCanvas.style.opacity = 0;
   }, RIPPLE_FADE_DELAY); // fade ripple gently, later
 
   setTimeout(() => {

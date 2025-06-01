@@ -4,6 +4,8 @@ const ctx = canvas.getContext('2d');
 let stars = [];
 let lastScrollY = 0;
 let shootingStar = null;
+let tiltX = 0, tiltY = 0;
+let targetTiltX = 0, targetTiltY = 0;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -82,6 +84,9 @@ function drawStars(scrollY = 0) {
 function animate(time) {
   const targetScrollY = window.scrollY || window.pageYOffset;
   lastScrollY += (targetScrollY - lastScrollY) * 0.05; // smoothing
+  tiltX += (targetTiltX - tiltX) * 0.1;
+  tiltY += (targetTiltY - tiltY) * 0.1;
+  canvas.style.transform = `translate3d(${tiltX}px, ${tiltY}px, 0)`;
   drawStars(lastScrollY);
   drawShootingStar(time);
   requestAnimationFrame(animate);
@@ -89,13 +94,20 @@ function animate(time) {
 
 window.addEventListener('resize', () => {
   resizeCanvas();
-  createStars(isMobile() ? 100 : 150);
+  createStars(isMobile() ? 80 : 150);
 });
 
 function isMobile() {
   return /Mobi|Android/i.test(navigator.userAgent);
 }
 
+if (window.DeviceOrientationEvent) {
+  window.addEventListener('deviceorientation', e => {
+    targetTiltX = (e.gamma || 0) * 0.5;
+    targetTiltY = (e.beta || 0) * 0.5;
+  });
+}
+
 resizeCanvas();
-createStars(isMobile() ? 100 : 150);
+createStars(isMobile() ? 80 : 150);
 animate();

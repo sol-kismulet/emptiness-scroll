@@ -9,4 +9,6 @@ canvas#starfield {
   pointer-events: none;
   z-index: 0;
   background: transparent;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
