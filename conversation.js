@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function attachShowLink() {
-    const link = document.getElementById('chalk-link');
+    const link = document.getElementById('toggle-link');
     if (link) {
       link.addEventListener('click', evt => {
         evt.preventDefault();
