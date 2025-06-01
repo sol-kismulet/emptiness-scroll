@@ -120,6 +120,13 @@ window.addEventListener('DOMContentLoaded', () => {
 setTimeout(() => {
   chalk.style.opacity = 0;
   document.getElementById('starfield').style.opacity = 1;
+  const chalkE = document.getElementById('chalk-e');
+  if (chalkE) {
+    chalkE.style.transition = 'opacity 1s ease-in-out';
+    const remove = () => chalkE.remove();
+    chalkE.addEventListener('transitionend', remove, { once: true });
+    chalkE.style.opacity = 0;
+  }
 }, STARFIELD_FADE_DELAY);
 
 // launch a single shooting star before the scroll fades in
