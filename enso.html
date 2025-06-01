@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enso Word Embedding</title>
   <style>
+    :root {
+      --enso-period: 10s;
+    }
     body {
       margin: 0;
       height: 100vh;
@@ -55,13 +58,18 @@
     const canvases = [mainCanvas, miniCanvas];
     const contexts = canvases.map(c => c.getContext('2d'));
 
+    const periodValue = getComputedStyle(document.documentElement)
+      .getPropertyValue('--enso-period').trim();
+    const rotationPeriodMs = (parseFloat(periodValue) || 10) * 1000;
+    const rotationSpeed = (2 * Math.PI) / rotationPeriodMs;
+
     function drawRing(ctx, size, time) {
       const radius = size * 0.4;
       const thickness = size * 0.08;
       ctx.clearRect(0, 0, size, size);
       ctx.save();
       ctx.translate(size / 2, size / 2);
-      ctx.rotate(time * 0.0002);
+      ctx.rotate(time * rotationSpeed);
       const grad = ctx.createConicGradient(0, 0, 0);
       grad.addColorStop(0, '#f00');
       grad.addColorStop(1/6, '#ff0');
