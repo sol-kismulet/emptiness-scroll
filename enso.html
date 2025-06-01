@@ -3,36 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rainbow Enso Test</title>
+  <title>Enso Word Embedding</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
       background: #000;
+      color: #fff;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      font-family: "Cormorant Garamond", serif;
     }
-    canvas {
-      width: 80vmin;
-      height: 80vmin;
+
+    #enso {
+      width: 70vmin;
+      height: 70vmin;
+    }
+
+    #word {
+      font-size: 4rem;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    #enso-mini {
+      width: 1em;
+      height: 1em;
+      margin-right: 0.05em;
+    }
+
+    #invite {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
   <canvas id="enso" width="512" height="512"></canvas>
+  <div id="word">
+    <canvas id="enso-mini" width="128" height="128"></canvas>
+    <span>pen</span>
+  </div>
+  <div id="invite">you are not required. you are invited.</div>
   <script>
-    const canvas = document.getElementById('enso');
-    const ctx = canvas.getContext('2d');
-    const radius = canvas.width * 0.4;
-    const thickness = canvas.width * 0.08;
+    const mainCanvas = document.getElementById('enso');
+    const miniCanvas = document.getElementById('enso-mini');
+    const canvases = [mainCanvas, miniCanvas];
+    const contexts = canvases.map(c => c.getContext('2d'));
 
-    function draw(time) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function drawRing(ctx, size, time) {
+      const radius = size * 0.4;
+      const thickness = size * 0.08;
+      ctx.clearRect(0, 0, size, size);
       ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate(time * 0.0002); // gentle rotation
-
+      ctx.translate(size / 2, size / 2);
+      ctx.rotate(time * 0.0002);
       const grad = ctx.createConicGradient(0, 0, 0);
       grad.addColorStop(0, '#f00');
       grad.addColorStop(1/6, '#ff0');
@@ -41,14 +70,18 @@
       grad.addColorStop(4/6, '#00f');
       grad.addColorStop(5/6, '#f0f');
       grad.addColorStop(1, '#f00');
-
       ctx.lineWidth = thickness;
       ctx.strokeStyle = grad;
       ctx.beginPath();
       ctx.arc(0, 0, radius, 0, Math.PI * 2);
       ctx.stroke();
-
       ctx.restore();
+    }
+
+    function draw(time) {
+      contexts.forEach((ctx, i) => {
+        drawRing(ctx, canvases[i].width, time);
+      });
       requestAnimationFrame(draw);
     }
 
