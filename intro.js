@@ -93,6 +93,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => {
     rippleCanvas.style.opacity = 0;
+    // clear any residual rings once faded
+    const ctx = rippleCanvas.getContext('2d');
+    ctx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
+    // remove the canvas after the fade to avoid lingering artifacts
+    setTimeout(() => rippleCanvas.remove(), 1600);
   }, RIPPLE_FADE_DELAY); // fade ripple gently, later
 
   setTimeout(() => {

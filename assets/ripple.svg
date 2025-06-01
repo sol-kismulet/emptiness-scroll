@@ -9,7 +9,6 @@
     </filter>
   </defs>
 
-  <circle cx="100" cy="100" r="2" fill="#fff" />
 
   <g filter="url(#soft-blur)">
     <circle cx="100" cy="100" r="1" fill="none" stroke="url(#ripple-grad)" stroke-width="1.5">
