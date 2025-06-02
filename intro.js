@@ -8,13 +8,14 @@ const CONTENT_FADE_DELAY = 12100;
 
 function startRippleAnimation(canvas) {
   const ctx = canvas.getContext('2d');
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const maxRadius = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2;
+  let centerX = canvas.width / 2;
+  let centerY = canvas.height / 2;
+  let maxRadius = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2;
   const ringDelays = [0, 800, 1600];
   const duration = 4000; // breathe longer
 
   let start;
+  let frameId;
   function draw(t) {
     if (!start) start = t;
     const elapsed = t - start;
@@ -35,11 +36,27 @@ function startRippleAnimation(canvas) {
     });
 
     if (elapsed < duration + ringDelays[ringDelays.length - 1]) {
-      requestAnimationFrame(draw);
+      frameId = requestAnimationFrame(draw);
     }
   }
 
-  requestAnimationFrame(draw);
+  frameId = requestAnimationFrame(draw);
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    centerX = canvas.width / 2;
+    centerY = canvas.height / 2;
+    maxRadius = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2;
+  }
+
+  window.addEventListener('resize', resize);
+
+  return () => {
+    cancelAnimationFrame(frameId);
+    window.removeEventListener('resize', resize);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
 }
 
 // Chalk text element
@@ -88,13 +105,14 @@ window.addEventListener('DOMContentLoaded', () => {
   rippleCanvas.style.transition = 'opacity 1.5s ease-in-out';
   intro.appendChild(rippleCanvas);
 
+  let cancelRipple;
   setTimeout(() => {
     rippleCanvas.style.opacity = 1;
-    startRippleAnimation(rippleCanvas);
+    cancelRipple = startRippleAnimation(rippleCanvas);
   }, RIPPLE_START_DELAY); // slight delay after load
 
   setTimeout(() => {
-    // clear any residual rings before fading out
+    if (cancelRipple) cancelRipple();
     const ctx = rippleCanvas.getContext('2d');
     ctx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
     const remove = () => {
@@ -114,6 +132,14 @@ window.addEventListener('DOMContentLoaded', () => {
     intro.remove();
     chalk.style.opacity = 1; // begin chalk fade in
   }, INTRO_REMOVE_DELAY); // remove overlay
+
+  // final safety removal for the ripple canvas if something prevented cleanup
+  setTimeout(() => {
+    if (rippleCanvas.parentNode) {
+      cancelRipple && cancelRipple();
+      rippleCanvas.remove();
+    }
+  }, INTRO_REMOVE_DELAY + 500);
 });
 
 // Reveal stars and content after chalk fades
