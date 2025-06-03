@@ -46,31 +46,42 @@
   </style>
 </head>
 <body>
-  <!-- <canvas id="enso" width="512" height="512"></canvas> -->
+  <canvas id="enso" width="512" height="512"></canvas>
   <div id="word">
     <!-- <canvas id="enso-mini" width="128" height="128"></canvas> -->
     <span>pen</span>
   </div>
   <div id="invite">you are not required. you are invited.</div>
-  <!--
   <script>
     const mainCanvas = document.getElementById('enso');
     const miniCanvas = document.getElementById('enso-mini');
-    const canvases = [mainCanvas, miniCanvas];
+    const canvases = [mainCanvas, miniCanvas].filter(Boolean);
     const contexts = canvases.map(c => c.getContext('2d'));
 
-    const periodValue = getComputedStyle(document.documentElement)
-      .getPropertyValue('--enso-period').trim();
-    const rotationPeriodMs = (parseFloat(periodValue) || 10) * 1000;
-    const rotationSpeed = (2 * Math.PI) / rotationPeriodMs;
+    function resize() {
+      canvases.forEach(canvas => {
+        if (canvas.id === 'enso') {
+          const size = Math.min(window.innerWidth, window.innerHeight) * 0.7;
+          canvas.width = canvas.height = size;
+        } else {
+          canvas.width = canvas.height = 128;
+        }
+      });
+    }
+    window.addEventListener('resize', resize);
+    resize();
 
-    function drawRing(ctx, size, time) {
+    let lastTime = 0;
+    let angle = 0;
+    const rotationSpeed = Math.PI; // Enso breathes with π — Soli Deo Gloria.
+
+    function drawRing(ctx, size) {
       const radius = size * 0.4;
       const thickness = size * 0.08;
       ctx.clearRect(0, 0, size, size);
       ctx.save();
       ctx.translate(size / 2, size / 2);
-      ctx.rotate(time * rotationSpeed);
+      ctx.rotate(angle);
       const grad = ctx.createConicGradient(0, 0, 0);
       grad.addColorStop(0, '#f00');
       grad.addColorStop(1/6, '#ff0');
@@ -88,15 +99,18 @@
     }
 
     function draw(time) {
+      if (!lastTime) lastTime = time;
+      const delta = (time - lastTime) / 1000;
+      lastTime = time;
+      angle += rotationSpeed * delta;
       contexts.forEach((ctx, i) => {
-        drawRing(ctx, canvases[i].width, time);
+        drawRing(ctx, canvases[i].width);
       });
       requestAnimationFrame(draw);
     }
 
     requestAnimationFrame(draw);
   </script>
-  -->
   <script src="debug.js"></script>
 </body>
 </html>
