@@ -20,57 +20,57 @@
       font-family: "Cormorant Garamond", serif;
     }
 
-    /* #enso {
-      width: 70vmin;
-      height: 70vmin;
-    } */
-
     #word {
       font-size: 4rem;
       margin-top: 1rem;
       display: flex;
-      align-items: center;
+      align-items: baseline;
     }
 
-    /* #enso-mini {
+    #enso {
       width: 1em;
       height: 1em;
       margin-right: 0.05em;
-    } */
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    #enso.show {
+      opacity: 1;
+      transform: scale(1);
+    }
 
     #invite {
       margin-top: 1rem;
       font-size: 1.2rem;
       color: #ccc;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #invite.show {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
-  <canvas id="enso" width="512" height="512"></canvas>
   <div id="word">
-    <!-- <canvas id="enso-mini" width="128" height="128"></canvas> -->
+    <canvas id="enso" width="512" height="512" data-acrostic="O"></canvas>
     <span>pen</span>
   </div>
   <div id="invite">you are not required. you are invited.</div>
   <script>
-    const mainCanvas = document.getElementById('enso');
-    const miniCanvas = document.getElementById('enso-mini');
-    const canvases = [mainCanvas, miniCanvas].filter(Boolean);
-    const contexts = canvases.map(c => c.getContext('2d'));
+    const canvas = document.getElementById('enso');
+    const ctx = canvas.getContext('2d');
 
     const debugParam = new URLSearchParams(window.location.search).get('enso-debug');
     const ensoDebug = !!debugParam;
     const verboseDebug = debugParam === 'verbose';
 
     function resize() {
-      canvases.forEach(canvas => {
-        if (canvas.id === 'enso') {
-          const size = Math.min(window.innerWidth, window.innerHeight) * 0.7;
-          canvas.width = canvas.height = size;
-        } else {
-          canvas.width = canvas.height = 128;
-        }
-      });
+      const size = Math.min(window.innerWidth, window.innerHeight) * 0.2;
+      canvas.width = canvas.height = size;
     }
     window.addEventListener('resize', resize);
     resize();
@@ -129,13 +129,15 @@
           }
           rotationStart = time;
         }
-      contexts.forEach((ctx, i) => {
-        drawRing(ctx, canvases[i].width);
-      });
+      drawRing(ctx, canvas.width);
       requestAnimationFrame(draw);
     }
 
     requestAnimationFrame(draw);
+
+    setTimeout(() => canvas.classList.add('show'), 1500);
+    const invite = document.getElementById('invite');
+    setTimeout(() => invite.classList.add('show'), 3000);
   </script>
   <script src="debug.js"></script>
 </body>
