@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 
 let stars = [];
 let lastScrollY = 0;
+let parallaxOffset = 0;
+let smoothParallax = 0;
 let shootingStar = null;
 let tiltX = 0, tiltY = 0;
 let targetTiltX = 0, targetTiltY = 0;
@@ -66,28 +68,33 @@ function drawShootingStar(time) {
   ctx.stroke();
 }
 
-function drawStars(scrollY = 0) {
+function drawStars(offsetY = 0) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let star of stars) {
     star.alpha += star.delta;
     if (star.alpha <= 0.3 || star.alpha >= 0.8) {
       star.delta = -star.delta;
     }
-    const offsetY = scrollY * star.depth * 0.05;
+    const y = star.baseY + offsetY * star.depth;
     ctx.beginPath();
-    ctx.arc(star.baseX, star.baseY + offsetY, star.radius, 0, Math.PI * 2, false);
+    ctx.arc(star.baseX, y, star.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
     ctx.fill();
   }
 }
 
 function animate(time) {
-  const targetScrollY = window.scrollY || window.pageYOffset;
-  lastScrollY += (targetScrollY - lastScrollY) * 0.05; // smoothing
+  const currentY = window.scrollY || window.pageYOffset;
+  const delta = currentY - lastScrollY;
+  parallaxOffset += delta * 0.5;
+  parallaxOffset = Math.max(-15, Math.min(15, parallaxOffset));
+  parallaxOffset *= 0.95; // gentle return
+  lastScrollY = currentY;
+  smoothParallax += (parallaxOffset - smoothParallax) * 0.1;
   tiltX += (targetTiltX - tiltX) * 0.1;
   tiltY += (targetTiltY - tiltY) * 0.1;
   canvas.style.transform = `translate3d(${tiltX}px, ${tiltY}px, 0)`;
-  drawStars(lastScrollY);
+  drawStars(smoothParallax);
   drawShootingStar(time);
   requestAnimationFrame(animate);
 }
