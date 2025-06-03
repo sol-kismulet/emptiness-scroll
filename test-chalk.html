@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chalk Text Test</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .chalk-text {
+      font-family: "Comic Sans MS", cursive;
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow:
+        0 0 2px #fff,
+        0 0 6px rgba(255, 255, 255, 0.8),
+        1px 1px 2px rgba(0, 0, 0, 0.4);
+      filter: brightness(1.1) contrast(1.05);
+      animation: chalk-settle 3s ease forwards;
+      opacity: 0;
+    }
+    @keyframes chalk-settle {
+      from {
+        opacity: 0;
+        filter: blur(3px) brightness(1.3);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0) brightness(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="chalk" class="chalk-text">welcome.</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('chalk');
+      el.addEventListener('animationend', () => {
+        console.log('chalk animation complete');
+      });
+      setTimeout(() => {
+        if (!document.querySelector('.chalk-text')) {
+          console.warn('chalk element missing');
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
