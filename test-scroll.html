@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll Event Test</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: sans-serif;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #222;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      transition: opacity 0.5s ease;
+    }
+    main {
+      padding-top: 80px;
+      min-height: 200vh;
+      background: linear-gradient(#000, #333);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header id="head">scroll down to test events</header>
+  <main></main>
+  <script>
+    const header = document.getElementById('head');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY || window.pageYOffset;
+      console.log('scrollY', y);
+      header.style.opacity = y > 50 ? '0.4' : '1';
+    });
+
+    setTimeout(() => {
+      if (!header) {
+        console.warn('header element missing');
+      } else {
+        console.log('scroll logic ready');
+      }
+    }, 500);
+  </script>
+</body>
+</html>

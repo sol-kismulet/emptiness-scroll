@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ripple Effect Test</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    canvas {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ripple" class="ripple"></canvas>
+  <script>
+    function startRippleAnimation(canvas) {
+      const ctx = canvas.getContext('2d');
+      let centerX = canvas.width / 2;
+      let centerY = canvas.height / 2;
+      let maxRadius = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2;
+      const ringDelays = [0, 800, 1600];
+      const duration = 4000;
+      let start;
+      let frameId;
+      function draw(t) {
+        if (!start) start = t;
+        const elapsed = t - start;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ringDelays.forEach(delay => {
+          const progress = (elapsed - delay) / duration;
+          if (progress < 0 || progress > 1) return;
+          const radius = 2 + progress * maxRadius;
+          const alpha = 1 - Math.pow(progress, 2);
+          ctx.beginPath();
+          ctx.filter = `blur(${progress * 2}px)`;
+          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+          ctx.lineWidth = 2;
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.filter = 'none';
+        });
+        if (elapsed < duration + ringDelays[ringDelays.length - 1]) {
+          frameId = requestAnimationFrame(draw);
+        }
+      }
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        centerX = canvas.width / 2;
+        centerY = canvas.height / 2;
+        maxRadius = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      frameId = requestAnimationFrame(draw);
+      return () => {
+        cancelAnimationFrame(frameId);
+        window.removeEventListener('resize', resize);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('ripple');
+      const cancel = startRippleAnimation(canvas);
+      setTimeout(() => {
+        cancel();
+        canvas.remove();
+        const remain = document.querySelector('.ripple');
+        if (remain) {
+          console.warn('ripple element failed to remove');
+        } else {
+          console.log('ripple element removed');
+        }
+      }, 6500);
+    });
+  </script>
+</body>
+</html>
