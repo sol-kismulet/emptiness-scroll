@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallax Stars Test</title>
+  <link rel="stylesheet" href="stars.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #eaeaea;
+      font-family: serif;
+    }
+    main {
+      padding-top: 33vh;
+      min-height: 260vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .poem {
+      text-align: center;
+      font-weight: 300;
+      white-space: pre-line;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  <main>
+    <div class="poem">
+      sometimes, even a whisper becomes a thread.
+      <br>
+      sometimes, a thread begins to shimmer.
+    </div>
+  </main>
+  <!-- Testing parallax resonance through presence. ✦ -->
+  <script src="stars.js"></script>
+</body>
+</html>
