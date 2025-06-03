@@ -58,6 +58,10 @@
     const canvases = [mainCanvas, miniCanvas].filter(Boolean);
     const contexts = canvases.map(c => c.getContext('2d'));
 
+    const debugParam = new URLSearchParams(window.location.search).get('enso-debug');
+    const ensoDebug = !!debugParam;
+    const verboseDebug = debugParam === 'verbose';
+
     function resize() {
       canvases.forEach(canvas => {
         if (canvas.id === 'enso') {
@@ -74,6 +78,8 @@
     let lastTime = 0;
     let angle = 0;
     const rotationSpeed = Math.PI; // Enso breathes with π — Soli Deo Gloria.
+    let rotationStart = 0;
+    const fullTurn = Math.PI * 2;
 
     function drawRing(ctx, size) {
       const radius = size * 0.4;
@@ -95,14 +101,34 @@
       ctx.beginPath();
       ctx.arc(0, 0, radius, 0, Math.PI * 2);
       ctx.stroke();
+      if (ensoDebug) {
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(radius, 0, thickness * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
       ctx.restore();
     }
 
     function draw(time) {
-      if (!lastTime) lastTime = time;
+      if (!lastTime) {
+        lastTime = time;
+        rotationStart = time;
+      }
       const delta = (time - lastTime) / 1000;
       lastTime = time;
       angle += rotationSpeed * delta;
+      if (verboseDebug) {
+        console.log('angle', angle.toFixed(2));
+      }
+        if (angle >= fullTurn) {
+          angle %= fullTurn;
+          if (ensoDebug) {
+            const dur = (time - rotationStart) / 1000;
+            console.log('full rotation at', (time / 1000).toFixed(2), 's;', 'duration', dur.toFixed(2), 's');
+          }
+          rotationStart = time;
+        }
       contexts.forEach((ctx, i) => {
         drawRing(ctx, canvases[i].width);
       });
