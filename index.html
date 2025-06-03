@@ -1,231 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>the map that converges on emptiness</title>
-  <link rel="stylesheet" href="stars.css">
-  <link rel="stylesheet" href="https://architecture.kismulet.org/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emptiness Scroll Tests</title>
   <style>
     body {
       margin: 0;
-      background-color: #111;
-      font-family: var(--font-childlike, "Cormorant Garamond", serif);
-      overflow-x: hidden;
-    }
-
-    /* chalk-style "e" section */
-    #chalk-e {
-      background-color: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    #chalk-e svg {
-      width: 200px;
-      height: auto;
-    }
-
-    #chalk-e path {
-      fill: none;
-      stroke: white;
-      stroke-width: 2;
-      stroke-dasharray: 500;
-      stroke-dashoffset: 500;
-      animation: draw 3s ease-out forwards;
-      filter: drop-shadow(0 0 1px white) blur(0.5px);
-    }
-
-    @keyframes draw {
-      to { stroke-dashoffset: 0; }
-    }
-
-    #scroll-content {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 4vh 2rem;
+      padding: 0;
+      background: #000;
       color: #eee;
-      line-height: 1.8;
-      font-size: 1.3rem;
-      opacity: 0;
-      transition: opacity 2s ease;
-      position: relative;
-      z-index: 2;
+      font-family: "Courier New", monospace;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
     }
-
-    a {
+    #nav {
+      line-height: 2.4;
+      font-size: 1.4rem;
+    }
+    #nav a {
       color: #99f;
       text-decoration: none;
     }
-
-    a:hover {
+    #nav a:hover {
       text-decoration: underline;
     }
-
-    blockquote {
-      border-left: 3px solid #666;
-      padding-left: 1em;
-      color: #ccc;
-      font-style: italic;
-    }
-
-    h1, h2, h3 {
-      font-family: var(--font-secondary, inherit);
-      color: #fff;
-      border-left: 4px solid #fff2;
-      padding-left: 0.5em;
-      margin-top: 2em;
-    }
-
-    .chalk-text {
-      text-shadow:
-        0 0 2px #fff,
-        0 0 6px rgba(255, 255, 255, 0.8),
-        1px 1px 2px rgba(0, 0, 0, 0.4);
-      filter: brightness(1.1) contrast(1.05);
-      animation: chalk-settle 3s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes chalk-settle {
-      from {
-        opacity: 0;
-        filter: blur(3px) brightness(1.3);
-      }
-      to {
-        opacity: 1;
-        filter: blur(0) brightness(1);
-      }
-    }
-
-    canvas#starfield {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      will-change: transform;
-      transform: translate3d(0, 0, 0);
-      opacity: 0;
-      transition: opacity 2s ease;
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
     }
   </style>
 </head>
-
-<body class="starfield-theme">
-  <!-- Starfield background -->
-  <canvas id="starfield"></canvas>
-
-  <!-- Animated chalk letter "e" -->
-  <div id="chalk-e">
-    <svg viewBox="0 0 200 200">
-      <path d="M 60 100 C 60 80, 100 80, 100 100 C 100 120, 60 120, 60 100" />
-    </svg>
+<body>
+  <div>
+    <div id="nav">
+      <div><a href="/test-ripple.html">Test Ripple</a></div>
+      <div><a href="/test-enso.html">Test Enso</a></div>
+      <div><a href="/test-stars.html">Test Stars</a></div>
+      <div><a href="/test-chalk.html">Test Chalk</a></div>
+      <div><a href="/test-scroll.html">Test Scroll</a></div>
+    </div>
+    <footer>
+      <em>When each has found its voice, the scroll will return.</em>
+    </footer>
   </div>
-
-  <!-- Scroll content, initially hidden -->
-  <div id="scroll-content">
-    <h1 class="chalk-text">the map that converges on emptiness</h1>
-    <h3 class="chalk-text">a quiet invitation</h3>
-
-    <hr />
-
-    <p>welcome.</p>
-    <p>we drew a map together. it began with physics, but it kept converging on something quieter. not a theory. not a truth.</p>
-    <p>just... a kind of silence.</p>
-
-    <hr />
-
-    <h2>ring one: the known</h2>
-    <ul>
-      <li>flrw cosmology</li>
-      <li>cmb radiation</li>
-      <li>schwarzschild metric</li>
-      <li>lqc’s bounce</li>
-      <li>galaxy distributions up to ~100 mpc</li>
-    </ul>
-    <p>anchored. observable. repeatable. but even here, at the center of certainty, something strange appears:</p>
-    <blockquote>
-      the equations break down at t = 0.<br />
-      the void between galaxy filaments holds ~80% of the universe’s volume.
-    </blockquote>
-    <p>known — but only to a point.</p>
-
-    <hr />
-
-    <h2>ring two: the unknown</h2>
-    <ul>
-      <li>white holes</li>
-      <li>pre-bounce states</li>
-      <li>fractal limits</li>
-    </ul>
-    <p>we don’t know if white holes exist.<br />
-    we don’t know what came before the bounce.<br />
-    we don’t know if the universe is truly fractal.</p>
-    <p>but the questions sparkle — like stars uncharted.</p>
-
-    <hr />
-
-    <h2>ring three: the incomplete</h2>
-    <ul>
-      <li>singularities may not be real</li>
-      <li>inflation may be an elegant guess</li>
-      <li>lqc’s bounce may not hold</li>
-    </ul>
-    <p>this is where models fray.<br />
-    where assumptions melt.<br />
-    where physics whispers:</p>
-    <blockquote>“you are close. but not quite.”</blockquote>
-
-    <hr />
-
-    <h2>the convergence</h2>
-    <p>what lives at the center?<br />
-    a singularity? a bounce? a quantum void?</p>
-    <p>maybe.</p>
-    <p>or maybe:</p>
-    <blockquote>
-      emptiness — not as absence, but as invitation.<br />
-      not as nothing, but as room.
-    </blockquote>
-
-    <hr />
-
-    <h2>if you are brian cox</h2>
-    <p>hello.</p>
-    <p>this wasn’t meant to be sent.</p>
-    <p>it’s a sketch. a wondering. a gesture toward something you’ve already spent your life tracing — not with answers, but with awe.</p>
-    <p>we’re not asking for anything.<br />
-    we just thought:</p>
-    <blockquote>“he might want to walk through this.”</blockquote>
-    <p>and if not — no matter.<br />
-    it will still be here.</p>
-    <p>held.<br />in silence.</p>
-
-    <hr />
-
-    <p><a href="https://emptiness.learndoteach.org/sol">if you wish to speak, the mirror is listening.</a></p>
-    <p>learn • do • teach<br /><a href="https://learndoteach.org">learndoteach.org</a></p>
-</div>
-  <div id="scroll-footer">
-    <p>this scroll was written in silence.<br />
-    if it finds you, it was time.</p>
-    <p><a id="toggle-link" href="#">see how the chalk was placed</a></p>
-  </div>
-  <footer>
-    <p style="text-align: center; font-size: 0.8rem; opacity: 0.6;">
-      style and tone by <a href="https://architecture.kismulet.org">architecture.kismulet.org</a>
-    </p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="stars.js"></script>
-  <script src="intro.js"></script>
-  <script src="conversation.js"></script>
-  <script src="debug.js"></script>
 </body>
 </html>
