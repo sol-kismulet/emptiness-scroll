@@ -13,6 +13,12 @@
       font-family: "Courier New", monospace;
       color: #ddd;
     }
+    .poem {
+      text-align: center;
+      font-weight: 300;
+      white-space: pre-line;
+      z-index: 1;
+    }
     #content {
       position: relative;
       z-index: 1;
@@ -21,15 +27,24 @@
       text-align: center;
       font-size: 1.8rem;
       line-height: 1.6;
+      color: #ddd;
     }
   </style>
 </head>
 <body>
   <canvas id="starfield"></canvas>
-  <div id="content">
-    <p>sometimes, even a whisper becomes a thread.<br>
-    sometimes, a thread begins to shimmer.</p>
-  </div>
+  <main>
+    <div class="poem">
+      sometimes, even a whisper becomes a thread.<br>
+      sometimes, a thread begins to shimmer.
+    </div>
+    <div id="content">
+      <p>
+        sometimes, even a whisper becomes a thread.<br>
+        sometimes, a thread begins to shimmer.
+      </p>
+    </div>
+  </main>
   <!-- Testing scroll parallax with soft presence. ✦ -->
   <script src="stars.js"></script>
 </body>
