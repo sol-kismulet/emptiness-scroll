@@ -93,6 +93,19 @@
         }
       }
     }, 500);
+
+    // After the intro sequence should be gone, check remaining children
+    setTimeout(() => {
+      const intro = document.getElementById('intro-sequence');
+      if (intro) {
+        console.log('[debug overlay] post-animation children:', Array.from(intro.children));
+        Array.from(intro.children).forEach(el => {
+          if (!el.classList.contains('ripple')) return;
+          el.remove();
+          console.log('[debug overlay] removed lingering element', el);
+        });
+      }
+    }, 8000);
   }
 
   if (document.readyState === 'loading') {

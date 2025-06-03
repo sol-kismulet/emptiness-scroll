@@ -133,6 +133,12 @@ window.addEventListener('DOMContentLoaded', () => {
     chalk.style.opacity = 1; // begin chalk fade in
   }, INTRO_REMOVE_DELAY); // remove overlay
 
+  // remove the chalk "e" element that lingers as a ring
+  setTimeout(() => {
+    const chalkE = document.getElementById('chalk-e');
+    if (chalkE) chalkE.remove();
+  }, INTRO_REMOVE_DELAY);
+
   // final safety removal for the ripple canvas if something prevented cleanup
   setTimeout(() => {
     if (rippleCanvas.parentNode) {
