@@ -6,6 +6,15 @@ const INTRO_REMOVE_DELAY = 8000; // final delay for overlay removal
 const STARFIELD_FADE_DELAY = 11300;
 const CONTENT_FADE_DELAY = 12100;
 
+function logChildren(phase) {
+  const chalkEl = document.querySelector('.chalk') || document.getElementById('chalk-text');
+  const rippleEl = document.querySelector('.ripple') || document.querySelector('[data-ripple-source]');
+  console.log('[ripple debug]', phase);
+  console.log('  chalk children:', chalkEl ? Array.from(chalkEl.childNodes) : null);
+  console.log('  ripple children:', rippleEl ? Array.from(rippleEl.childNodes) : null);
+  console.log('  body children:', Array.from(document.body.childNodes));
+}
+
 function startRippleAnimation(canvas) {
   const ctx = canvas.getContext('2d');
   let centerX = canvas.width / 2;
@@ -92,6 +101,8 @@ window.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(intro);
 
   const rippleCanvas = document.createElement('canvas');
+  rippleCanvas.dataset.rippleSource = 'true';
+  rippleCanvas.classList.add('ripple');
   rippleCanvas.width = window.innerWidth;
   rippleCanvas.height = window.innerHeight;
   rippleCanvas.style.width = '100vw';
@@ -109,6 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     rippleCanvas.style.opacity = 1;
     cancelRipple = startRippleAnimation(rippleCanvas);
+    logChildren('ripple start');
   }, RIPPLE_START_DELAY); // slight delay after load
 
   setTimeout(() => {
@@ -121,6 +133,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     rippleCanvas.addEventListener('transitionend', remove);
     rippleCanvas.style.opacity = 0;
+    logChildren('ripple fade');
   }, RIPPLE_FADE_DELAY); // fade ripple gently, later
 
   setTimeout(() => {
@@ -141,10 +154,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // final safety removal for the ripple canvas if something prevented cleanup
   setTimeout(() => {
-    if (rippleCanvas.parentNode) {
-      cancelRipple && cancelRipple();
-      rippleCanvas.remove();
+    document.querySelectorAll('[data-ripple-source]').forEach(el => {
+      if (el.parentNode) {
+        cancelRipple && cancelRipple();
+        el.remove();
+      }
+    });
+    if (chalk.parentNode) {
+      chalk.innerHTML = '';
+      chalk.remove();
     }
+    logChildren('ripple removal');
   }, INTRO_REMOVE_DELAY + 500);
 });
 
