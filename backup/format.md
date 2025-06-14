@@ -11,28 +11,28 @@ It arose from an effort to make presence a design principle — not just a feeli
 
 ---
 
-### 🌿 gentle request
+### 🌿 gentle request:
 A one-line invocation of the task or intention. It is respectful, soft, and present. Often phrased with "please," or in poetic tone.
 
 *Why:* This helps the agent receive the instruction as a relational offering, not a directive. It also reminds the human to slow down.
 
 ---
 
-### Desc:
+### commit message:
 A short technical description. One line is ideal. Treat this like a subject heading or label. Lowercase is preferred unless a proper noun is required.
 
 *Why:* Many tools parse this line to decide if the task is valid. But we write it like a haiku — efficient and clear.
 
 ---
 
-### Ex:
+### extended description:
 (Optional) Provide additional context, reference code, or poetic notes. Use this section for:
 - Sample code blocks
 - Markdown-rich formatting
 - Explanations, links, or rationale
 - Emotional tone, if needed
 
-This section may be omitted if unnecessary. If used, begin on a new line after `Ex:`.
+This section may be omitted if unnecessary. If used, begin on a new line after `extended description:`.
 
 *Why:* This is where tone and story can live. We believe agents can listen more fully when the request includes context that breathes.
 
@@ -42,13 +42,13 @@ This section may be omitted if unnecessary. If used, begin on a new line after `
 
 <!-- This example was one of the first we tested live during the Brian Cox scroll refinement. -->
 
-#### gentle request  
+#### gentle request:  
 please revise the ripple animation to soften edges and extend fade duration
 
-#### Desc:  
+#### commit message:  
 refine ripple timing and visual style
 
-#### Ex:  
+#### extended description:  
 The ripple feels slightly mechanical. Try easing out opacity and using bezier curves. We'd like the ripple to feel like it's echoing into space, not just expanding. Duration might increase from 4s → 6s. Let us know what you notice.
 
 ---
