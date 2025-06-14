@@ -4,6 +4,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const glyphs = {
     enso: renderEnso
+    feather: renderFeather
+
   };
 
   const elements = document.querySelectorAll("glyph[type], .glyph[data-type]");
