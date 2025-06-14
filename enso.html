@@ -56,88 +56,15 @@
 </head>
 <body>
   <div id="word">
-    <canvas id="enso" width="512" height="512" data-acrostic="O"></canvas>
+    <div class="glyph" data-type="enso"></div>
     <span>pen</span>
   </div>
+
   <div id="invite">you are not required. you are invited.</div>
-  <script>
-    const canvas = document.getElementById('enso');
-    const ctx = canvas.getContext('2d');
 
-    const debugParam = new URLSearchParams(window.location.search).get('enso-debug');
-    const ensoDebug = !!debugParam;
-    const verboseDebug = debugParam === 'verbose';
-
-    function resize() {
-      const size = Math.min(window.innerWidth, window.innerHeight) * 0.2;
-      canvas.width = canvas.height = size;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    let lastTime = 0;
-    let angle = 0;
-    const rotationSpeed = Math.PI; // Enso breathes with π — Soli Deo Gloria.
-    let rotationStart = 0;
-    const fullTurn = Math.PI * 2;
-
-    function drawRing(ctx, size) {
-      const radius = size * 0.4;
-      const thickness = size * 0.08;
-      ctx.clearRect(0, 0, size, size);
-      ctx.save();
-      ctx.translate(size / 2, size / 2);
-      ctx.rotate(angle);
-      const grad = ctx.createConicGradient(0, 0, 0);
-      grad.addColorStop(0, '#f00');
-      grad.addColorStop(1/6, '#ff0');
-      grad.addColorStop(2/6, '#0f0');
-      grad.addColorStop(3/6, '#0ff');
-      grad.addColorStop(4/6, '#00f');
-      grad.addColorStop(5/6, '#f0f');
-      grad.addColorStop(1, '#f00');
-      ctx.lineWidth = thickness;
-      ctx.strokeStyle = grad;
-      ctx.beginPath();
-      ctx.arc(0, 0, radius, 0, Math.PI * 2);
-      ctx.stroke();
-      if (ensoDebug) {
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(radius, 0, thickness * 0.4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    function draw(time) {
-      if (!lastTime) {
-        lastTime = time;
-        rotationStart = time;
-      }
-      const delta = (time - lastTime) / 1000;
-      lastTime = time;
-      angle += rotationSpeed * delta;
-      if (verboseDebug) {
-        console.log('angle', angle.toFixed(2));
-      }
-        if (angle >= fullTurn) {
-          angle %= fullTurn;
-          if (ensoDebug) {
-            const dur = (time - rotationStart) / 1000;
-            console.log('full rotation at', (time / 1000).toFixed(2), 's;', 'duration', dur.toFixed(2), 's');
-          }
-          rotationStart = time;
-        }
-      drawRing(ctx, canvas.width);
-      requestAnimationFrame(draw);
-    }
-
-    requestAnimationFrame(draw);
-
-    setTimeout(() => canvas.classList.add('show'), 1500);
-    const invite = document.getElementById('invite');
-    setTimeout(() => invite.classList.add('show'), 3000);
-  </script>
+  <script src="enso.js"></script>
+  <script src="glyphs.js"></script>
 </body>
 </html>
+
+
