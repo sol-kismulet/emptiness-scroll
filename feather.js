@@ -2,6 +2,9 @@
 // renders a hand-traced feather glyph with scroll-compatible styling
 
 function renderFeather(container) {
+  if (container.dataset.featherLoaded) {
+    return;
+  }
   // Add the refined feather animation styles
   const style = document.createElement('style');
   style.textContent = `
@@ -87,6 +90,7 @@ function renderFeather(container) {
           el.setAttribute('stroke-linejoin', 'round');
         });
       }
+      container.dataset.featherLoaded = 'true';
     })
     .catch(error => {
       console.error('Failed to load feather.svg:', error);
