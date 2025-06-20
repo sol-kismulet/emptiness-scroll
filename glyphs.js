@@ -3,7 +3,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const glyphs = {
-    enso: renderEnso
+    enso: renderEnso,
     feather: renderFeather
 
   };

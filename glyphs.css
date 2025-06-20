@@ -37,3 +37,11 @@ body {
   vertical-align: -0.15em;
   margin-right: -0.05em;
 }
+
+.feather path {
+  stroke: white !important;
+  fill: white !important;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

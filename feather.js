@@ -1,17 +1,94 @@
 // feather.js
-// renders a lightweight feather symbol with soft presence
+// renders a hand-traced feather glyph with scroll-compatible styling
 
 function renderFeather(container) {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", "0 0 64 64");
-  svg.setAttribute("width", "1em");
-  svg.setAttribute("height", "1em");
-  svg.style.verticalAlign = "middle";
-  svg.innerHTML = `
-    <path d="M12 52 C24 48, 36 36, 44 24 C48 18, 50 12, 46 10 C42 8, 34 12, 28 18 C20 26, 16 36, 12 52 Z"
-      fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  `;
+  // Add the refined feather animation styles
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes featherFall {
+      0% {
+        transform: translate3d(0, -3em, 0) rotateZ(0deg) rotateY(0deg);
+      }
 
-  container.innerHTML = "";
-  container.appendChild(svg);
+      10% {
+        transform: translate3d(0, -2.7em, 0) rotateZ(2deg) rotateY(-1deg);
+      }
+
+      25% {
+        transform: translate3d(0, -2em, 0) rotateZ(3deg) rotateY(-2deg);
+      }
+
+      45% {
+        transform: translate3d(0, -1em, 0) rotateZ(-2deg) rotateY(2deg);
+      }
+
+      70% {
+        transform: translate3d(0, -0.2em, 0) rotateZ(0.8deg) rotateY(-1deg);
+      }
+
+      95% {
+        transform: translate3d(0, 0.02em, 0) rotateZ(0.1deg);
+      }
+
+      100% {
+        transform: translate3d(0, 0, 0) rotateZ(0deg) rotateY(0deg);
+      }
+    }
+
+    .feather {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transform: translate3d(0, -3em, 0) rotateZ(0deg) rotateY(0deg);
+      will-change: transform, opacity;
+      transform-origin: center;
+    }
+
+    .feather-animate {
+      opacity: 1;
+      animation: featherFall 6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    svg path {
+      fill: none;
+      stroke: white;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  `;
+  
+  // Only add the style once
+  if (!document.querySelector('#feather-styles')) {
+    style.id = 'feather-styles';
+    document.head.appendChild(style);
+  }
+
+  fetch('feather.svg')
+    .then(response => response.text())
+    .then(svgText => {
+      container.innerHTML = svgText;
+
+      const svg = container.querySelector('svg');
+      if (svg) {
+        svg.setAttribute('width', '1em');
+        svg.setAttribute('height', '1em');
+        svg.classList.add('feather');
+        setTimeout(() => {
+          svg.classList.add('feather-animate');
+        }, 100);
+
+        // Apply the refined styling
+        svg.querySelectorAll('path, line').forEach(el => {
+          el.setAttribute('stroke', 'white');
+          el.setAttribute('fill', 'none');
+          el.setAttribute('stroke-width', '1.5');
+          el.setAttribute('stroke-linecap', 'round');
+          el.setAttribute('stroke-linejoin', 'round');
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Failed to load feather.svg:', error);
+    });
 }
