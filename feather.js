@@ -2,6 +2,12 @@
 // renders a hand-traced feather glyph with scroll-compatible styling
 
 function renderFeather(container) {
+  if (container.dataset.featherLoaded === "true" ||
+      container.dataset.featherLoading === "true") {
+    return;
+  }
+
+  container.dataset.featherLoading = "true";
   // Add the refined feather animation styles
   const style = document.createElement('style');
   style.textContent = `
@@ -67,6 +73,8 @@ function renderFeather(container) {
   fetch('feather.svg')
     .then(response => response.text())
     .then(svgText => {
+      container.dataset.featherLoading = "false";
+      container.dataset.featherLoaded = "true";
       container.innerHTML = svgText;
 
       const svg = container.querySelector('svg');
@@ -89,6 +97,7 @@ function renderFeather(container) {
       }
     })
     .catch(error => {
+      container.dataset.featherLoading = "false";
       console.error('Failed to load feather.svg:', error);
     });
 }
