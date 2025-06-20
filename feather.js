@@ -2,6 +2,11 @@
 // renders a hand-traced feather glyph with scroll-compatible styling
 
 function renderFeather(container) {
+  if (container.dataset.featherLoaded) {
+    return;
+  }
+  container.dataset.featherLoaded = 'true';
+
   // Add the refined feather animation styles
   const style = document.createElement('style');
   style.textContent = `
@@ -75,8 +80,14 @@ function renderFeather(container) {
         svg.setAttribute('height', '1em');
         svg.classList.add('feather');
         setTimeout(() => {
-          svg.classList.add('feather-animate');
+          if (!svg.classList.contains('feather-animate')) {
+            svg.classList.add('feather-animate');
+          }
         }, 100);
+
+        svg.addEventListener('animationend', () => {
+          console.log('Feather animation complete');
+        }, { once: true });
 
         // Apply the refined styling
         svg.querySelectorAll('path, line').forEach(el => {
